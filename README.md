@@ -37,12 +37,12 @@ Jaringan ini menggunakan topologi VPN *Hub-and-Spoke* (subnet `10.8.0.x`) supaya
 - **Eksekusi:** Setting Nginx di VPS sebagai *Reverse Proxy*. Tugasnya bagi-bagi *traffic* pengunjung secara adil (metode Round-Robin) ke kedua Raspi lewat VPN.
 - **Tuning High Availability:** Biar sistemnya peka, saya modif parameternya pakai `proxy_connect_timeout 2s` dan `max_fails=1`. 
 - **Hasil:** *Failover* super cepat! Kalau salah satu kabel power Raspi saya cabut paksa, dalam waktu kurang dari 2 detik sistem langsung sadar dan lempar semua *traffic* ke Raspi yang hidup. User nggak bakal sadar kalau ada server yang mati, dan bebas dari halaman *error* `502 Bad Gateway`.
-![Nginx Failover Test](images/failover_test.png)
+![Nginx Failover Test](images/failover_test.gif)
 
 ### 💾 3. Kloning Data Real-Time (MariaDB)
 - **Eksekusi:** Mengaktifkan *Master-Slave Replication* di MariaDB yang berjalan melintasi terowongan VPN.
 - **Hasil:** Sinkronisasi instan. Tiap ada data baru yang masuk ke Raspi 3 (Master), detik itu juga datanya langsung ter-copy ke Raspi Zero (Slave). Jadi kalau server utama sampai meledak atau rusak, datanya dipastikan tetap utuh di mesin yang lain.
-![Database Replication](images/db_replication.png)
+![Database Replication](images/db_replication.gif)
 
 ### 📊 4. Ruang Kontrol Terpusat (Observability Stack)
 - **Eksekusi:** Saya pasang `Node Exporter` sebagai mata-mata di ketiga mesin. Lalu VPS bertugas menjalankan `Prometheus` untuk narik datanya tiap 15 detik, dan memunculkannya pakai visualisasi `Grafana`.
